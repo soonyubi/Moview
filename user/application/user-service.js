@@ -1,5 +1,5 @@
-const {GenerateSalt, GenerateHashedPassword, GenerateSignature, FormateData, VaildatePassword} = require('../util');
-
+const {GenerateSalt, GenerateHashedPassword, GenerateSignature, FormateData, VaildatePassword, AuthStatus, CorrectPassword, CorrectEmail} = require('../util');
+const {UserRepository} = require('../database');
 
 class UserService{
     constructor() {
@@ -8,12 +8,18 @@ class UserService{
 
     async SignUp(userInputs){
         const {email, password, phone} = userInputs;
+        const isExist = await this.repository.FindUser({email});
+        if(isExist) {
+            return {"status":AuthStatus.SIGNUP_ALREADY_MATCHED_USER_EXIST};
+        }
+        if(!CorrectPassword(password)) return {"status":AuthStatus.SIGNUP_INVALID_PASSWORD};
+        if(!CorrectEmail(email)) return {"status":AuthStatus.SIGNUP_INVALID_EMAIL};
 
         try{
             let salt = await GenerateSalt();
             let userPassword = await GenerateHashedPassword(password, salt);
 
-            const new_user = await this.repository.CreateCustomer({email, password : userPassword, phone , salt});
+            const new_user = await this.repository.CreateUser({email, password : userPassword, phone , salt});
 
             const token = await GenerateSignature({email:email, _id:new_user._id,});
 
@@ -27,18 +33,21 @@ class UserService{
     async SignIn(userInputs){
         const {email, password} = userInputs;
         try{
-            const ext_user = this.repository.FindCustomer({email});
+            const ext_user = await this.repository.FindUser({email});
+            
             if(ext_user)
             {
                 const isValid = await VaildatePassword(password, ext_user.password, ext_user.salt);
                 if(isValid)
                 {
+                    
                     const token = await GenerateSignature({email:email, _id: ext_user._id});
                     return FormateData({id:ext_user._id, token});
                 }
+                
             }
 
-            return FormateData(null);
+            return FormateData({data:null});
         }catch (e) {
             throw new Error('Data Not Found',e);
         }
@@ -116,6 +125,44 @@ class UserService{
         }
         catch (err){
             throw new Error('No match User', err);
+        }
+    }
+
+    async GetInterest(userId){
+        try{
+            const interest = await this.repository.FindInterestByUserid(userId);
+           
+            return interest;
+        }catch(err){
+
+        }
+        
+    }
+
+    async AddInterest({_id,name,platform, genre, country, releaseDate, ageLimit, time}){
+        try{
+            
+            const interestResult = await this.repository.CreateInterest({_id,name,platform, genre, country, releaseDate, ageLimit, time});
+            return FormateData(interestResult);
+
+        }catch(err){
+
+        }
+    }
+
+    async UpdateInterest(userId,interestId){
+        try{
+
+        }catch(err){
+
+        }
+    }
+
+    async DeleteInterest(userId,interestId){
+        try{
+
+        }catch(err){
+
         }
     }
 

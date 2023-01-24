@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "set NODE_ENV=prod&&nodemon ./index.js",
+    "dev": "set NODE_ENV=dev&&nodemon ./index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -13,9 +14,13 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
     "morgan": "~1.9.1",
     "pug": "^3.0.2",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

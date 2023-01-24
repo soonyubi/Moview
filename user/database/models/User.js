@@ -11,7 +11,7 @@ const UserSchema = new Schema({
     interest:[
         {type:Schema.Types.ObjectId, ref:"interest",required:true}
     ],
-    rank : {type: Number },
+    rank : {type: Number, default:0 },
     age: {type: Number},
     registered_at : {type: Date, default : Date.now()},
     updated_at : {type:Date,default : Date.now()},
@@ -29,6 +29,27 @@ const UserSchema = new Schema({
             }
         }
     ],
-    LikedMovies:[],
-    NotLikedMovies:[],
+    LikedMovies:[
+        {
+            movie : {
+                _id: {type: String, required:true},
+                kor_name : {type: String, required:true},
+                eng_name : {type:String, required:true},
+                banner: {type:String, required:true},
+                link : {type:String,required:true},
+            }
+        }
+    ],
+    NotLikedMovies:[
+        {
+            movie : {
+                _id: {type: String, required:true},
+                kor_name : {type: String, required:true},
+                eng_name : {type:String, required:true},
+                banner: {type:String, required:true},
+                link : {type:String,required:true},
+            }
+        }],
 });
+
+module.exports =  mongoose.model('user', UserSchema);

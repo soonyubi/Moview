@@ -9,7 +9,7 @@ if(process.env.NODE_ENV !== "prod"){
 }
 
 module.exports = {
-    PORT : process.env.NODE_ENV || 8001,
+    PORT : process.env.PORT || 8001,
     DB_URL : process.env.MONGODB_URI || "mongodb://localhost:27017",
     APP_SECRET : process.env.APP_SECRET,
 }
