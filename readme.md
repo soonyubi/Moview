@@ -25,10 +25,10 @@ prodrafts://note/?uuid=695B69B4-3FC5-4C0A-9677-2A87F9253EBF
 
 - [https://drive.google.com/file/d/1z-CN9dNNFV1IgzZo4aJqkhrjkRh-riwN/view?usp=sharing](https://drive.google.com/file/d/1z-CN9dNNFV1IgzZo4aJqkhrjkRh-riwN/view?usp=sharing)
     
-    여기에 세부 정보를 입력하세요.
+
     
 
-![제목 없는 다이어그램.drawio.png](%E1%84%86%E1%85%A9%E1%84%87%E1%85%B2%20f8dd91636989431fb6a09847399e9e9b/%25EC%25A0%259C%25EB%25AA%25A9_%25EC%2597%2586%25EB%258A%2594_%25EB%258B%25A4%25EC%259D%25B4%25EC%2596%25B4%25EA%25B7%25B8%25EB%259E%25A8.drawio.png)
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/214330365-e62dc231-b826-4ac8-bf05-db5a17dad772.png"/>
 
 - 수정 내역
     - 2023-01-14
@@ -50,11 +50,12 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 
 [Monolithic Architecture]
 
-![Untitled](%E1%84%86%E1%85%A9%E1%84%87%E1%85%B2%20f8dd91636989431fb6a09847399e9e9b/Untitled.png)
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/214330685-a1484c21-0466-4eaa-b031-de9d738f2c97.png"/>
 
 [MSA]
 
-![Untitled](%E1%84%86%E1%85%A9%E1%84%87%E1%85%B2%20f8dd91636989431fb6a09847399e9e9b/Untitled%201.png)
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/214330502-f5fd890e-5b4f-448d-aa98-27b589f1684a.png"/>
+
 
 추가로 서비스간에 비동기 통신으로 작업하기 위해서 RabbitMQ를 사용하려고 한다. 서비스 사이를 direct로 연결시켜 놓게 되면 하나의 서비스가 다운이 되었을 때 다른 서비스의 요청을 못 받게 되므로 production level에서 문제가 생길 수 있기 때문이다. Kafka를 사용하지 않고 RabbitMQ를 사용한 이유는 상대적으로 Rabbit MQ가 소규모 어플리케이션에 어울린다고 생각했다. 
 
