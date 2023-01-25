@@ -107,10 +107,11 @@ class UserService{
         }
     }
 
-    async GetProfile(userId){
+    async GetProfile(user){
         // 유저 정보 전체를 조회
         try{
-            const ext_user = this.repository.FindUserById(userId);
+            const {_id} = user;
+            const ext_user = await this.repository.FindUserById(_id);
             return FormateData(ext_user);
         }
         catch (err){
@@ -118,54 +119,52 @@ class UserService{
         }
     }
 
-    async UpdateProfile(id, userInfo){
-        try{
-            const ext_user = this.repository.FindUserByIdAndUpdate(userId,userInfo);
-            return FormateData(ext_user);
-        }
-        catch (err){
-            throw new Error('No match User', err);
-        }
-    }
-
-    async GetInterest(userId){
-        try{
-            const interest = await this.repository.FindInterestByUserid(userId);
-           
-            return interest;
-        }catch(err){
-
-        }
-        
-    }
-
-    async AddInterest({_id,name,platform, genre, country, releaseDate, ageLimit, time}){
+    async UpdateProfile(userId, userInfo){
         try{
             
-            const interestResult = await this.repository.CreateInterest({_id,name,platform, genre, country, releaseDate, ageLimit, time});
-            return FormateData(interestResult);
-
-        }catch(err){
-
+            const data = this.repository.UpdateUser(userId,userInfo);
+            return FormateData(data);
+        }
+        catch (err){
+            throw new Error('No match User', err);
         }
     }
 
-    async UpdateInterest(userId,interestId){
-        try{
+    async InterestService(userId, req, event_type)
+    {
 
-        }catch(err){
+        switch(event_type){
+            case 'GETALL':
+                const all_interest = await this.repository.FindAllInterest(userId);
+                if(all_interest!==null) return {"status":all_interest};
+                return {"status":"FAIL"};
+            case 'GET':
+                const interest = await this.repository.FindInterest(userId,req.params.interestId);
+                if(interest!==null) return {"status":interest};
+                return {"status":"FAIL"};
+            case 'CREATE':
+                const create_data = req.body;
+                const created_data = await this.repository.UpdateInterest(userId,create_data);
+                if(created_data!=null) return {"status":created_data};
+                return {"status":"FAIL"};
+            case 'UPDATE':
+                const update_data = req.body;
+                const updated_data = await this.repository.UpdateInterest(userId,update_data);
+                if(updated_data!=null) return {"status":"SUCCESS"};
+                return {"status":"FAIL"};
+                break;
+            case 'DELETE':
+                const deleted_data = await this.repository.DeleteInterest(userId,req.params.interestId);
+                if(deleted_data!=null) return {"status":"SUCCESS"};
+                return {"status":"FAIL"};
+                break;
+            default:
 
         }
+        return {"status":"INVALID_EVENT_TYPE"};
     }
 
-    async DeleteInterest(userId,interestId){
-        try{
-
-        }catch(err){
-
-        }
-    }
-
+    
     async GetSeeLater(userId){
         try{
             const SeeLater = this.repository.GetSeeLater(userId);
@@ -182,6 +181,14 @@ class UserService{
         }catch(e){
             throw new Error('Update See Later  by userid is not working',e);
         }
+    }
+
+    async ManageMovie(){
+
+    }
+
+    async ManageReview(){
+        
     }
 
 

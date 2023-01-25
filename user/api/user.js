@@ -57,33 +57,41 @@ module.exports = (app)=>{
 
     });
 
-    app.delete('/interest',UserAuth,(req,res,next)=>{
-        
-        try {
+   
 
+    app.delete('/interest/:interestId',UserAuth,async (req,res,next)=>{
+        
+        const {_id} = req.user;
+        try {
+            
+            const {status} = await service.InterestService(_id,req,'DELETE');
+            // console.log(data);
+            
+            res.json(status);
         }
         catch (e) {
 
         }
     });
-
-    app.delete('/interest',UserAuth,(req,res,next)=>{
-        
-        try {
-
-        }
-        catch (e) {
-
-        }
-    });
-
     app.post('/interest',UserAuth,async (req,res,next)=>{
         
         try {
-            const userId = req.user;
-            const {name,platform, genre, country, releaseDate, ageLimit, time} = req.body;
-            const {data} = await service.AddInterest({_id:userId, name,platform, genre, country, releaseDate, ageLimit, time});
-            return res.json(data);
+            const {_id} = req.user;
+            // const {_id,name,platform, genre, country, releaseDate, ageLimit, time} = req.body;
+            const {status} = await service.InterestService(_id, req, 'CREATE');
+            return res.json(status);
+        }
+        catch (e) {
+
+        }
+    });
+    app.put('/interest',UserAuth,async (req,res,next)=>{
+        
+        try {
+            const {_id} = req.user;
+            // const {_id,name,platform, genre, country, releaseDate, ageLimit, time} = req.body;
+            const {status} = await service.InterestService(_id, req, 'UPDATE');
+            return res.json(status);
         }
         catch (e) {
 
@@ -93,26 +101,42 @@ module.exports = (app)=>{
     app.get("/interest",UserAuth, async(req,res,next)=>{
         try {
             const userId = req.user;
-            const {data} = await service.GetInterest(userId);
-            res.json(data);
+            const {status} = await service.InterestService(userId,req,'GETALL');
+            res.json(status);
         }
         catch (e) {
 
         }
     });
 
-    app.put("/interest",UserAuth, (req,res,next)=>{
+    app.get("/interest/:interestId",UserAuth, async(req,res,next)=>{
         try {
-
+            const userId = req.user;
+            const {status} = await service.InterestService(userId,req,'GET');
+            res.json(status);
         }
         catch (e) {
 
         }
     });
 
-    app.get("/profile",UserAuth,(req,res,next)=>{
+    
+    app.get("/profile",UserAuth,async (req,res,next)=>{
         try {
+            const user = req.user;
+            const {data} = await service.GetProfile(user);
+            return res.json(data);
+        }
+        catch (e) {
 
+        }
+    });
+
+    app.put("/profile",UserAuth,async (req,res,next)=>{
+        try {
+            const {_id} = req.user;
+            const {data} = await service.UpdateProfile(_id,req.body);
+            return res.json(data); 
         }
         catch (e) {
 
@@ -124,7 +148,7 @@ module.exports = (app)=>{
 
         }
         catch (e) {
-
+            
         }
     });
 }

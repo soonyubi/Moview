@@ -57,6 +57,8 @@ module.exports.CorrectEmail = (email)=>{
 }
 
 module.exports.FormateData = (data)=>{
+    
     if(data) return {data};
+    else return {data:null};
     throw new Error('Data not found');
 }
