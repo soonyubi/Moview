@@ -28,11 +28,14 @@ prodrafts://note/?uuid=695B69B4-3FC5-4C0A-9677-2A87F9253EBF
 
     
 
-<img width="60%" src="https://user-images.githubusercontent.com/46443443/214330365-e62dc231-b826-4ac8-bf05-db5a17dad772.png"/>
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/215486562-0f465384-e233-495c-b0fe-3a630b121f24.png"/>
 
 - 수정 내역
     - 2023-01-14
         - actor, director, movie, movie_info, category, user, review, ott ENTITY 생성
+    - 2023-01-30
+        - USER/MOVIE/REVIEW 를 데이터베이스로 잡고, MOVIE 컬렉션에는 연관된 정보들을 분리해서 서브컬렉션으로 만들었음 
+        - actor, director, info, platform 
 
 ### API 설계
 

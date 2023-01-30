@@ -64,6 +64,8 @@ class MoiveService{
         }
     }
 
+    async GetMoviePayload(userId, movieId,)
+
     async GetMoviesByActor(actor){
         try{
             const result = await this.repository.FindMovieByActorName(actor);
@@ -81,6 +83,8 @@ class MoiveService{
             throw new Error(err);
         }
     }
+
+
 
 
 }
