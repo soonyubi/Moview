@@ -11,7 +11,7 @@ const MovieSchema = new Schema({
     genre : [{type:String}],
     releaseDate : {type: String, required: true},
     platform : [{type:String}],
-    link : {type : String, required: true},
+    poster : {type : String, required: true},
     runningTime : {type: Number, required:true},
     country: {type :String, required:true},
     description: {type: String, required: true},
@@ -22,7 +22,6 @@ const MovieSchema = new Schema({
             role : {type:Number,required:true},
         }
     ],
-    directors:[{type:Schema.Types.ObjectId, ref:"movie.directors",required:true}]
 });
 
 module.exports = mongoose.model('movie.info',MovieSchema);

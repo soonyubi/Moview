@@ -107,11 +107,22 @@ class MovieRepository{
                 const result = await ActorModel.updateOne({name:director.name},{$push:{movieList:movieId}});
             }
         });
-
     }
 
     /** ------------------- UPDATE ----------------------- */
+    async UpdateOneMovie(movieId,u){
+        const result = await MovieModel.updateOne({_id:movieId},u);
+        return result;
+    }
 
+    async UpdateManyMovie(condition,u){
+        const result = await MovieModel.updateMany(condition,u);
+        return result;
+    }
+    async UpdateActor(actorId,u){
+        const result = await MovieModel.updateOne({_id:movieId},u);
+        return result;
+    }    
     /** ------------------- DELETE ----------------------- */
     
 };
