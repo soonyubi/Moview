@@ -11,5 +11,10 @@ else{
 module.exports = {
     APP_SECRET : process.env.APP_SECRET,
     DB_URI : process.env.MONGODB_URI,
-    PORT : process.env.PORT
+    PORT : process.env.PORT,
+    MESSAGE_BROKER_URL : process.env.MESSAGE_BROKER_URL,
+    EXCHANGE_NAME : "MOVIEW",
+    REVIEW_BINDING_KEY : "REVIEW_SERVICE",
+    USER_BINDING_KEY : "USER_SERVICE"
+
 }

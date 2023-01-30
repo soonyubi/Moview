@@ -9,13 +9,14 @@ const MovieSchema = new Schema({
     base_score : {type:mongoose.Types.Decimal128,required:true},
     user_score :{type:mongoose.Types.Decimal128,required:true},
     genre : [{type:String}],
-    releaseDate : {type: String, required: true},
+    releaseDate : {type: Date, required: true},
     platform : [{type:String}],
     poster : {type : String, required: true},
     runningTime : {type: Number, required:true},
     country: {type :String, required:true},
     description: {type: String, required: true},
     ageLimit : {type :Number, required:true},
+    reviewCnt:{type:Number,required:true},
     actors:[
         {
             name : {type:String,required:true},

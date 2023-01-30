@@ -5,8 +5,9 @@ class MovieRepository{
     /** ------------------- READ ----------------------- */
 
 
-    async FindAllMovies_Short(){
-        const result = await MovieModel.find({},{rank:1, kor_name:1,eng_name:1,country:1,poster:1,ageLimit:1});
+    async FindAllMovies_Short(option,condition){
+        const result = await MovieModel.find(condition,{rank:1, kor_name:1,eng_name:1,country:1,poster:1,ageLimit:1}).sort(option);
+        console.log(result);
         return result;
     }
     
@@ -30,8 +31,13 @@ class MovieRepository{
     async FindMovieByActorName(actorName){
         // 배우 이름으로 조회해서 나온 영화 id 리스트에 포함된 영화들을 리턴 
         const temp = await ActorModel.find({$or:[{name:actorName},{alias:actorName}]});
-        const movieList = temp.movieList;
-        const result = await MovieModel({_id:movieList});
+        // console.log(temp);
+        if(temp.length===0) return null;
+        const movieList = temp[0].movieList;
+        // console.log(movieList);
+        if(movieList.length===0) return null;
+        const result = await MovieModel.find({_id:movieList});
+        // console.log(result);
         return result;
     }
     
@@ -45,7 +51,11 @@ class MovieRepository{
     async FindMovieByDirectorName(directorName){
         // 배우 이름으로 조회해서 나온 영화 id 리스트에 포함된 영화들을 리턴 
         const temp = await DirectorModel.find({$or:[{name:directorName},{alias:directorName}]});
-        const movieList = temp.movieList;
+        console.log(temp);
+        if(temp.length===0) return null;
+        const movieList = temp[0].movieList;
+        console.log(movieList);
+        if(movieList.length===0) return null;
         const result = await MovieModel({_id:movieList});
         return result;
     }
@@ -61,11 +71,11 @@ class MovieRepository{
         const result = await ActorModel.find({movieList:movieId});
     }
 
-    async FindMovieByCondition(condition){
+    async FindMovieByCondition(option,condition){
         // front에서 설정한 조건값을 기준으로 영화를 검색 
         // 또는 내 관심목록 조건값을 기준으로 
         // e.g. platform : ["netflix","appletv","tving"] -> $all : 
-        const result = await MovieModel.find(condition);
+        const result = await MovieModel.find(condition).sort(option);
         return result;
     }
 
