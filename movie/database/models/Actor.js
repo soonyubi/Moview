@@ -4,18 +4,8 @@ const Schema = mongoose.Schema;
 const ActorSchema = new Schema({
     name : {type:String, required: true},
     alias : [{type:String}],
-    movieList : [
-        {
-            movie : {
-                _id : {type : String},
-                platform : [
-                    {type:String}
-                ],
-                rank : {type : String},
-                main : {type :Boolean}
-            }
-        }
-    ]
+    movieList : [{type:String}],
+    img: {type:String,required:true}
 })
 
-module.exports = mongoose.model('actor',ActorSchema);
+module.exports = mongoose.model('movie.actor',ActorSchema);

@@ -1,5 +1,5 @@
 
 module.exports={
-    // MovieRepository : require('./repositroy/movie-repository'),
+    MovieRepository : require('./repository/movie-repository'),
     databaseConnection : require('./connection')
 }

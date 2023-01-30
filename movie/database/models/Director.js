@@ -4,18 +4,8 @@ const Schema = mongoose.Schema;
 const DirectorSchema = new Schema({
     name : {type:String, required: true},
     alias : [{type:String}],
-    movieList : [
-        {
-            movie : {
-                _id : {type : String},
-                platform : [
-                    {type:String}
-                ],
-                rank : {type : String},
-                main : {type :Boolean}
-            }
-        }
-    ]
+    movieList : [{type:String}],
+    img: {type:String,required:true}
 })
 
-module.exports = mongoose.model('director',DirectorSchema);
+module.exports = mongoose.model('movie.director',DirectorSchema);

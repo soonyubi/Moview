@@ -8,12 +8,13 @@ const UserSchema = new Schema({
     nickname : {type: String, default : `user + ${uuid()}`},
     salt : {type: String, required: true,trim : true},
     phone : {type : String, required:true,trim : true},
+    banner : {type : String, required: true,trim : true},
     interest:[
         {type:Schema.Types.ObjectId, ref:"interest",required:true}
     ],
     rank : {type: Number, default:0 },
     age: {type: Number},
-    registered_at : {type: Date, default : Date.now()},
+    created_at : {type: Date, default : Date.now()},
     updated_at : {type:Date,default : Date.now()},
     LikedReviews:[
         {

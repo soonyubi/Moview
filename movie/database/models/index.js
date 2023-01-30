@@ -1,6 +1,6 @@
 
 module.exports = {
-    MovieModel : require('./Movie'),
+    MovieModel : require('./Info'),
     ActorModel : require('./Actor'),
     DirectorModel : require('./Director')
 }
