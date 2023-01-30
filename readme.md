@@ -76,5 +76,5 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 
 ### DevOps
 
-추가적으로, CI/CI를 위해서 github action을 사용하고자 한다. 
+추가적으로, CI/CI를 위해서 github action을 사용하고자 한다
 
