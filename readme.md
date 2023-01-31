@@ -68,7 +68,7 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 
 추가로 서비스간에 비동기 통신으로 작업하기 위해서 RabbitMQ를 사용하려고 합니다. 서비스 사이를 direct로 연결시켜 놓게 되면 하나의 서비스가 다운이 되었을 때 다른 서비스의 요청을 못 받게 되므로 production level에서 문제가 생길 수 있기 때문입니다. Kafka를 사용하지 않고 RabbitMQ를 사용한 이유는 상대적으로 Rabbit MQ가 소규모 어플리케이션에 어울린다고 생각했습니다.
 
-비동기 통신을 위한 구조는 다음과 같습니다. 
+비동기 통신을 위한 구조는 다음과 같습니다
 
 
 <img width="60%" src="https://user-images.githubusercontent.com/46443443/215671400-bb77c0b4-0fe6-4abe-a19f-c5ef53239ac6.png"/>
