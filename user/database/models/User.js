@@ -16,40 +16,34 @@ const UserSchema = new Schema({
     age: {type: Number},
     created_at : {type: Date, default : Date.now()},
     updated_at : {type:Date,default : Date.now()},
-    LikedReviews:[
+    review : [
         {
-            review: {
-                
-            }
-        }
-    ],
-    NotLikedReviews:[
-        {
-            review: {
-                
-            }
+            _id : {type:String, required : true},
+            
         }
     ],
     LikedMovies:[
         {
-            movie : {
-                _id: {type: String, required:true},
-                kor_name : {type: String, required:true},
-                eng_name : {type:String, required:true},
-                banner: {type:String, required:true},
-                link : {type:String,required:true},
-            }
+            _id: {type: String, required:true},
+            kor_name : {type: String, required:true},
+            eng_name : {type:String, required:true},
+            poster: {type:String, required:true},
+            country: {type:String, required:true},
+            rank : {type:Number,required:true},
+            ageLimit : {type:Number,required :true},
+                
         }
     ],
     NotLikedMovies:[
         {
-            movie : {
-                _id: {type: String, required:true},
-                kor_name : {type: String, required:true},
-                eng_name : {type:String, required:true},
-                banner: {type:String, required:true},
-                link : {type:String,required:true},
-            }
+            _id: {type: String, required:true},
+            kor_name : {type: String, required:true},
+            eng_name : {type:String, required:true},
+            poster: {type:String, required:true},
+            country: {type:String, required:true},
+            rank : {type:Number,required:true},
+            ageLimit : {type:Number,required :true},
+                
         }],
 });
 

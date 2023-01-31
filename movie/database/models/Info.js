@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const MovieSchema = new Schema({
-    rank : {type: String,required:true},
+    rank : {type: Number,required:true},
     kor_name : {type:String, required: true, trim: true},
     eng_name : {type:String, required: true, trim: true},
     cur_score : {type:mongoose.Types.Decimal128, required: true},

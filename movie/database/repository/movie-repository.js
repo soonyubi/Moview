@@ -6,7 +6,7 @@ class MovieRepository{
 
 
     async FindAllMovies_Short(option,condition){
-        const result = await MovieModel.find(condition,{rank:1, kor_name:1,eng_name:1,country:1,poster:1,ageLimit:1}).sort(option);
+        const result = await MovieModel.find(condition,{_id:1,rank:1, kor_name:1,eng_name:1,country:1,poster:1,ageLimit:1}).sort(option);
         console.log(result);
         return result;
     }
