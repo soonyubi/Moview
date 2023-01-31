@@ -1,14 +1,18 @@
 const UserService = require('../application/user-service');
-const { AuthStatus } = require('../util');
+const { MOVIE_BINDING_KEY, REVIEW_BINDING_KEY } = require('../config');
+const { AuthStatus, SubscribeMovieMessage , SubscribeReviewMessage } = require('../util');
 const UserAuth = require('./auth/auth');
 
-module.exports = (app)=>{
+module.exports = (app, channel)=>{
 
     const service = new UserService();
+    SubscribeMovieMessage(channel, service , MOVIE_BINDING_KEY);
+    // SubscribeReviewMessage(channel, service, REVIEW_BINDING_KEY);
 
     app.post('/signup',async (req,res,next)=>{
         try {
             const {email, password, phone} = req.body;
+            
             const data = await service.SignUp({email,password,phone});
 
             switch(data.status){
@@ -48,16 +52,17 @@ module.exports = (app)=>{
         }
     });
 
-    app.get("/platforms",(req,res,next)=>{
-
-
-    });
-
-    app.get("likedReviews",(req,res,next)=>{
-
-    });
-
    
+    app.get("likedMoivies",(req,res,next)=>{
+
+    });
+
+    app.get("unlikedReviews",(req,res,next)=>{
+
+    });
+
+
+
 
     app.delete('/interest/:interestId',UserAuth,async (req,res,next)=>{
         
@@ -149,6 +154,56 @@ module.exports = (app)=>{
         }
         catch (e) {
             
+        }
+    });
+
+    app.post("/test/addLikes",UserAuth,async (req,res,next)=>{
+        try{
+            const {_id} = req.user;
+            const data = {
+                _id : "63d7963899e4afffadb13de0",
+                rank:1,
+                kor_name:"더메뉴",
+                eng_name:"themenu",
+                poster : "www.abc.com",
+                country :"america",
+                ageLimit : 3
+            }
+            const payload = {
+                event:"LIKE_MOVIE",
+                data:data
+            }
+
+           
+            const result = await service.SubScribeEvents(_id,JSON.stringify(payload), 'MOVIE');
+            return res.json(result);
+        }catch(err){
+            throw new error(err);
+        }
+    });
+
+    app.post("/test/addUnLikes",UserAuth,async (req,res,next)=>{
+        try{
+            const {_id} = req.user;
+            const data = {
+                _id : "63d7963899e4afffadb13de0",
+                rank:1,
+                kor_name:"더메뉴",
+                eng_name:"themenu",
+                poster : "www.abc.com",
+                country :"america",
+                ageLimit : 3
+            }
+            const payload = {
+                event:"UNLIKE_MOVIE",
+                data:data
+            }
+
+           
+            const result = await service.SubScribeEvents(_id,JSON.stringify(payload), 'MOVIE');
+            return res.json(result);
+        }catch(err){
+            throw new error(err);
         }
     });
 }

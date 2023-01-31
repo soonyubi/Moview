@@ -7,6 +7,7 @@ class UserRepository{
     async FindUser({email}){
         try{
             const result = await UserModel.findOne({email:email});
+            console.log(result);
             return result;
         }
         catch(err){
@@ -43,7 +44,7 @@ class UserRepository{
                 salt,
                 phone
             });
-            const result = new_user.save();
+            const result = await new_user.save();
             return result;
         }
         catch(err){
@@ -58,11 +59,11 @@ class UserRepository{
         return data;
     }
     async FindAllInterest(userId){
-        const ext_user = await UserModel.findById(userId);
+        const ext_user = await UserModel.findById(userId).populate("interest");
         if(!ext_user) return null;
-        const result = await ext_user.populate("interest");
-        console.log(result);
-        return result.interest;
+        
+        console.log(ext_user.interest);
+        return ext_user.interest;
     }
     async CreateInterest(userId, create_data){
         const {name,platform, genre, country, releaseDate, ageLimit, time} = create_data;
@@ -151,7 +152,93 @@ class UserRepository{
 
         }
     }
+    
+    async UpdateLikes(userId, movie){
+        try{
+            const result = await UserModel.findOne({_id:userId});
+            let LikedMovies = result.LikedMovies;
+            if(LikedMovies.length>0){
+                let isExist = false;
+                LikedMovies.map(item=>{
+                    if(item._id.toString()===movie._id.toString()){
+                        const index = LikedMovies.indexOf(item);
+                        LikedMovies.splice(index,1);
+                        isExist= true;
+                    }
 
+                });
+
+                if(!isExist){
+                    LikedMovies.push(movie);
+                }
+            }else{
+                LikedMovies.push(movie);
+            }
+            result.LikedMovies = LikedMovies;
+            const Saved = await result.save();
+            return Saved;
+        }catch(err){
+            throw new error(err);
+        }
+    }
+
+    async UpdateUnlikes(userId,movie){
+        try{
+            const result = await UserModel.findOne({_id:userId});
+            let NotLikedMovies = result.NotLikedMovies;
+            if(NotLikedMovies.length>0){
+                let isExist = false;
+                NotLikedMovies.map(item=>{
+                    if(item._id.toString()===movie._id.toString()){
+                        const index = NotLikedMovies.indexOf(item);
+                        NotLikedMovies.splice(index,1);
+                        isExist= true;
+                    }
+
+                });
+
+                if(!isExist){
+                    NotLikedMovies.push(movie);
+                }
+            }else{
+                NotLikedMovies.push(movie);
+            }
+            result.NotLikedMovies = NotLikedMovies;
+            const Saved = await result.save();
+            return Saved;
+        }catch(err){
+            throw new error(err);
+        }
+    }
+
+    async UpdateSeeLater(userId, movie){
+        try{
+            const result = await UserModel.findOne({_id:userId});
+            let SeeLater = result.SeeLater;
+            if(SeeLater.length>0){
+                let isExist = false;
+                SeeLater.map(item=>{
+                    if(item._id.toString()===movie._id.toString()){
+                        const index = SeeLater.indexOf(item);
+                        SeeLater.splice(index,1);
+                        isExist= true;
+                    }
+
+                });
+
+                if(!isExist){
+                    SeeLater.push(movie);
+                }
+            }else{
+                SeeLater.push(movie);
+            }
+            result.SeeLater = SeeLater;
+            const Saved = await result.save();
+            return Saved;
+        }catch(err){
+            throw new error(err);
+        }
+    }
 }
 
 module.exports = UserRepository;

@@ -64,7 +64,16 @@ class MoiveService{
         }
     }
 
-    async GetMoviePayload(userId, movieId,)
+    GetPayload(userId,movie,event){
+        const payload = {
+            event : event,
+            userId : userId,
+            data : movie
+        }
+        return payload;
+    }
+
+    
 
     async GetMoviesByActor(actor){
         try{

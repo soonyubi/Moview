@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     nickname : {type: String, default : `user + ${uuid()}`},
     salt : {type: String, required: true,trim : true},
     phone : {type : String, required:true,trim : true},
-    banner : {type : String, required: true,trim : true},
+    banner : {type : String, required: true,trim : true, default : "www.abc.com"},
     interest:[
         {type:Schema.Types.ObjectId, ref:"interest",required:true}
     ],
@@ -20,6 +20,18 @@ const UserSchema = new Schema({
         {
             _id : {type:String, required : true},
             
+        }
+    ],
+    SeeLater:[
+        {
+            _id: {type: String, required:true},
+            kor_name : {type: String, required:true},
+            eng_name : {type:String, required:true},
+            poster: {type:String, required:true},
+            country: {type:String, required:true},
+            rank : {type:Number,required:true},
+            ageLimit : {type:Number,required :true},
+                
         }
     ],
     LikedMovies:[

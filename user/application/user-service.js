@@ -14,15 +14,15 @@ class UserService{
         }
         if(!CorrectPassword(password)) return {"status":AuthStatus.SIGNUP_INVALID_PASSWORD};
         if(!CorrectEmail(email)) return {"status":AuthStatus.SIGNUP_INVALID_EMAIL};
-
+        
         try{
             let salt = await GenerateSalt();
             let userPassword = await GenerateHashedPassword(password, salt);
-
+            
             const new_user = await this.repository.CreateUser({email, password : userPassword, phone , salt});
 
             const token = await GenerateSignature({email:email, _id:new_user._id,});
-
+            console.log(token);
             return FormateData({id:new_user._id, token});
         }
         catch (err){
@@ -183,26 +183,64 @@ class UserService{
         }
     }
 
-    async ManageMovie(){
+    async ManageMovie(userId, movie, isDelete, isSeeLater){
+        // 영화 좋아요 싫어요 
+        
+        if(isSeeLater){ 
+            const result = await this.repository.UpdateSeeLater(userId, movie);
+            return result;
+        }
+        else
+        {
+            if(isDelete){
+                const result = await this.repository.UpdateUnlikes(userId,movie);
+                return result;
+            }
+            else{
+                
+                const result = await this.repository.UpdateLikes(userId,movie);
+                return result;
+            }
 
+        }
     }
 
     async ManageReview(){
         
     }
 
+    
 
 
-    async SubScribeEvents(payload){
+    async SubScribeEvents( payload, type){
+        
         payload = JSON.parse(payload);
-        const {event , data} = payload;
+        console.log(payload);
+        const {userId ,event, data} = payload;
+        
+        const {_id , kor_name, eng_name, poster, country, rank, ageLimit} = data;
+
+        if(type==='MOVIE'){
+            switch(event)
+            {
+                case 'LIKE_MOVIE':
+                    const result = await this.ManageMovie(userId,{_id , kor_name, eng_name, poster, country, rank, ageLimit},false,false);
+                    return result;
+                case 'UNLIKE_MOVIE':
+                    const result2 = await this.ManageMovie(userId,{_id , kor_name, eng_name, poster, country, rank, ageLimit},true,false);
+                    return result2;
+                case 'SEE_LATER':
+                    const result3 = await this.ManageMovie(userId,{_id , kor_name, eng_name, poster, country, rank, ageLimit},false,true);
+            }
+        }else{
+            // type === REVIEW
+            
+
+        }
+        
 
         
-        switch(event)
-        {
-            case 'UPDATE_PLATFORM':
-                this.UpdatePlatform(userId, platformList);
-        }
+        
     }
 }
 

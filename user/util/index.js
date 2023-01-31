@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { APP_SECRET } = require('../config');
+const { APP_SECRET,MESSAGE_BROKER_URL ,EXCHANGE_NAME,REVIEW_BINDING_KEY,MOVIE_BINDING_KEY,QUEUE_NAME} = require('../config');
+const amqplib = require('amqplib');
 
 module.exports.AuthStatus = 
 {
@@ -62,3 +63,53 @@ module.exports.FormateData = (data)=>{
     else return {data:null};
     throw new Error('Data not found');
 }
+
+/* MESSAGE BROKER */
+
+module.exports.CreateChannel = async()=>{
+    try{
+        const connection = await amqplib.connect(MESSAGE_BROKER_URL);
+        const channel = await connection.createChannel();
+        await channel.assertExchange(EXCHANGE_NAME, 'direct',false);
+        return channel;
+    }catch(err){
+        throw new Error(err);
+    }
+}
+
+module.exports.PublishMessage = async(channel, binding_key, message)=>{
+    try{
+        await channel.publish(EXCHANGE_NAME, binding_key, Buffer.from(message));
+        console.log("MESSAGE HAS BEEN SENT FROM MOVIE SERVICE : "+ message);
+    }catch(err){
+        throw new Error(err);
+    }
+};
+
+module.exports.SubscribeMovieMessage = async(channel, service, binding_key)=>{
+    const appQueue = await channel.assertQueue(QUEUE_NAME);
+
+    channel.bindQueue(appQueue.queue, EXCHANGE_NAME, binding_key);
+
+    channel.consume(appQueue.queue, data=>{
+            console.log("received data from queue");
+            console.log(data.content.toString());
+            
+            service.SubScribeEvents(data.content.toString(),'MOVIE');
+            channel.ack(data);
+    });
+};
+
+module.exports.SubscribeReviewMessage = async(channel, service, binding_key)=>{
+    const appQueue = await channel.assertQueue(QUEUE_NAME);
+
+    channel.bindQueue(appQueue.queue, EXCHANGE_NAME, binding_key);
+
+    channel.consume(appQueue.queue, data=>{
+            console.log("received data from queue");
+            console.log(data.content.toString());
+            
+            service.SubScribeEvents(data.content.toString(),'REVIEW');
+            channel.ack(data);
+    });
+};

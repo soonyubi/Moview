@@ -17,7 +17,7 @@ class MovieRepository{
     }
 
     async FindMovieById(movieId){
-        const result = await MovieModel.findById(movieId);
+        const result = await MovieModel.findOne({_id:movieId});
         return result;
     }
     
