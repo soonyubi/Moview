@@ -79,6 +79,16 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 - 유저 이벤트 
     - 리뷰 이벤트에서 데이터를 받고 어떤 로직을 수행한 결과를 다시 리뷰이벤트로 보냅니다. 왜냐하면, 리뷰 데이터 베이스에는 유저 정보가 포함되어야 하고 , 유저 데이터 베이스에도 리뷰 정보가 포함되어야 하기 때문입니다. 
 
+### 에러 핸들링
+에러 로그를 수집하기 위해서 sentry 툴을 사용했습니다. 
+sentry를 사용한 이유는 소스 코드의 어느 위치에서 에러가 발생했는지 상세하게 스택을 확인할 수 있기 때문입니다. 
+
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/216065556-bce9024f-2755-4cd3-b14d-cc4c3606ca3d.png"/>
+
+각 서비스 당 에러를 수집하도록 구성했습니다. 
+
+<img width="60%" src="https://user-images.githubusercontent.com/46443443/216064898-4b767049-f90d-4b56-8bbf-0c9926983bab.png"/>
+
 
 ### 배포
 
