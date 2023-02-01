@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { APP_SECRET,MESSAGE_BROKER_URL ,EXCHANGE_NAME,REVIEW_BINDING_KEY,MOVIE_BINDING_KEY,QUEUE_NAME} = require('../config');
+const { APP_SECRET,MESSAGE_BROKER_URL ,EXCHANGE_NAME,REVIEW_BINDING_KEY,MOVIE_BINDING_KEY,REVIEW_QUEUE,MOVIE_QUEUE, USER_BINDING_KEY} = require('../config');
 const amqplib = require('amqplib');
 
 module.exports.AuthStatus = 
@@ -87,10 +87,10 @@ module.exports.PublishMessage = async(channel, binding_key, message)=>{
 };
 
 module.exports.SubscribeMovieMessage = async(channel, service, binding_key)=>{
-    const appQueue = await channel.assertQueue(QUEUE_NAME);
+    const appQueue = await channel.assertQueue(MOVIE_QUEUE);
 
     channel.bindQueue(appQueue.queue, EXCHANGE_NAME, binding_key);
-
+    
     channel.consume(appQueue.queue, data=>{
             console.log("received data from queue");
             console.log(data.content.toString());
@@ -101,15 +101,21 @@ module.exports.SubscribeMovieMessage = async(channel, service, binding_key)=>{
 };
 
 module.exports.SubscribeReviewMessage = async(channel, service, binding_key)=>{
-    const appQueue = await channel.assertQueue(QUEUE_NAME);
+    const appQueue = await channel.assertQueue(REVIEW_QUEUE);
 
     channel.bindQueue(appQueue.queue, EXCHANGE_NAME, binding_key);
-
-    channel.consume(appQueue.queue, data=>{
+    
+    channel.consume(appQueue.queue,async data=> {
             console.log("received data from queue");
             console.log(data.content.toString());
             
-            service.SubScribeEvents(data.content.toString(),'REVIEW');
+            let payload = await service.SubScribeEvents(data.content.toString(),'REVIEW');
+            console.log('payload : : :: :' ,payload);
+            this.PublishMessage(channel,USER_BINDING_KEY,JSON.stringify(payload));
             channel.ack(data);
     });
+    
+    
+
+
 };

@@ -18,8 +18,11 @@ const UserSchema = new Schema({
     updated_at : {type:Date,default : Date.now()},
     review : [
         {
-            _id : {type:String, required : true},
-            
+            _id : {type:String},
+            movieId : {type:String},
+            description : {type:String},
+            score : {type:mongoose.Types.Decimal128},
+            registered_at:{type:Date}
         }
     ],
     SeeLater:[

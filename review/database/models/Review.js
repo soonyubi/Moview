@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 
 const ReviewSchema = new Schema({
     user : {
-        _id : {type:String, required:true},
-        nickname : {type:String, required:true},
-        banner :{type:String,required:true},
-        rank : {type:String, required:true}
+        _id : {type:String},
+        nickname : {type:String},
+        banner :{type:String},
+        rank : {type:Number}
     },
     movieId: {type:String, required:true},
     score : {type:mongoose.Types.Decimal128, required: true},

@@ -53,6 +53,44 @@ class UserRepository{
         }
     }
 
+    async UpdateReview(userId, data){
+        const ext_user = await UserModel.findById(userId);
+        const new_review = {
+            _id : data._id,
+            movieId : data.movieId,
+            description : data.description,
+            score : data.score,
+            registered_at : data.registered_at
+        }
+        if(ext_user){
+            let review_list = ext_user.review;
+            if(review_list.length > 0){
+                let isExist = false;
+                review_list.map(item =>{
+                    if(item._id.toString()===new_review._id.toString()){
+                        const index = review_list.indexOf(item);
+                        review_list.splice(index,1);
+                        isExist = true;
+                    }
+                });
+
+                if(!isExist){
+                    review_list.push(new_review);
+                }
+            }else{
+                review_list.push(new_review);
+            }
+
+            ext_user.review = review_list;
+            const result = await ext_user.save();
+            
+            return result;
+        }
+       
+        
+    }
+
+
     async FindInterest(userId,interestId){
         const data = await InterestModel.findById({_id:interestId});
         if(!data) return null;

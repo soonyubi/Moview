@@ -6,7 +6,7 @@ class ReviewService{
     constructor(){
         this.repository = new ReviewRepository();
     }
-
+    
     async ReadReview(movieId){
         try{
             const result = await this.repository.FindReviewByMovieId(movieId);
@@ -17,9 +17,9 @@ class ReviewService{
         }
     }
 
-    async CreateReview(review){
+    async CreateReview(user,review){
         try{
-            const result = await this.repository.InsertReview(review);
+            const result = await this.repository.InsertReview(user,review);
             return FormateData(result);
         }
         catch(err){
@@ -48,6 +48,29 @@ class ReviewService{
         }
     }
 
+    GetPayload(userId, event, data){
+        const payload = {
+            userId : userId,
+            event : event,
+            data : data
+        }
+        return payload;
+    }
+
+    async SubScribeEvents(payload)
+    {
+        payload = JSON.parse(payload);
+        const {event, user, data} = payload;
+        console.log("payload",payload);
+        switch(event){
+            case 'CREATE_REVIEW':
+                const result = await this.repository.AddUserInfo(user,data);
+                return result;
+        }
+        
+        
+
+    }
 
 }
 

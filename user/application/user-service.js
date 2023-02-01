@@ -1,4 +1,4 @@
-const {GenerateSalt, GenerateHashedPassword, GenerateSignature, FormateData, VaildatePassword, AuthStatus, CorrectPassword, CorrectEmail} = require('../util');
+const {GenerateSalt, GenerateHashedPassword, GenerateSignature, FormateData, VaildatePassword, AuthStatus, CorrectPassword, CorrectEmail, PublishMessage} = require('../util');
 const {UserRepository} = require('../database');
 
 class UserService{
@@ -217,10 +217,11 @@ class UserService{
         payload = JSON.parse(payload);
         console.log(payload);
         const {userId ,event, data} = payload;
-        
-        const {_id , kor_name, eng_name, poster, country, rank, ageLimit} = data;
+        console.log(type);
+       
 
         if(type==='MOVIE'){
+            const {_id , kor_name, eng_name, poster, country, rank, ageLimit} = data;
             switch(event)
             {
                 case 'LIKE_MOVIE':
@@ -233,14 +234,40 @@ class UserService{
                     const result3 = await this.ManageMovie(userId,{_id , kor_name, eng_name, poster, country, rank, ageLimit},false,true);
             }
         }else{
+            const {_id, movieId, score, description, registered_at} = data;
             // type === REVIEW
-            
+            console.log('subscribe event - review')
+            switch(event){
+                case 'CREATE_REVIEW':
+                    
+                    const result = await this.repository.UpdateReview(userId,{_id, movieId, score, description, registered_at});
+                    const user = {
+                        _id : result._id,
+                        nickname : result.nickname,
+                        banner : result.banner,
+                        rank : result.rank
+                    };
+                    const payload = this.GetPayload(user,data,'CREATE_REVIEW');
+                    return payload;                    
+                case 'READ_REVIEW':
+                case 'UPDATE_REVIEW':
+                case 'DELETE_REVIEW':
+                case 'LIKE_REVIEW':
+                case 'UNLIKE_REVIEW':
+
+            }
 
         }
         
+    }
 
-        
-        
+    GetPayload(user, data, event){
+        const payload = {
+            user : user,
+            data : data,
+            event : event
+        }
+        return payload;
     }
 }
 

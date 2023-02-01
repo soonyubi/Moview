@@ -7,7 +7,7 @@ module.exports = (app, channel)=>{
 
     const service = new UserService();
     SubscribeMovieMessage(channel, service , MOVIE_BINDING_KEY);
-    // SubscribeReviewMessage(channel, service, REVIEW_BINDING_KEY);
+    SubscribeReviewMessage(channel, service, REVIEW_BINDING_KEY);
 
     app.post('/signup',async (req,res,next)=>{
         try {
