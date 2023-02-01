@@ -8,4 +8,5 @@ module.exports = async (app, channel)=>{
     app.use(express.static(__dirname + '/public'));
 
     user(app, channel);
+    
 }

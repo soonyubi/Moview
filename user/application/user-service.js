@@ -1,5 +1,6 @@
 const {GenerateSalt, GenerateHashedPassword, GenerateSignature, FormateData, VaildatePassword, AuthStatus, CorrectPassword, CorrectEmail, PublishMessage} = require('../util');
 const {UserRepository} = require('../database');
+const { NotFoundError, ValidationError } = require('../util/errors/app-error');
 
 class UserService{
     constructor() {
@@ -22,7 +23,7 @@ class UserService{
             const new_user = await this.repository.CreateUser({email, password : userPassword, phone , salt});
 
             const token = await GenerateSignature({email:email, _id:new_user._id,});
-            console.log(token);
+            // console.log(token);
             return FormateData({id:new_user._id, token});
         }
         catch (err){
@@ -32,25 +33,20 @@ class UserService{
 
     async SignIn(userInputs){
         const {email, password} = userInputs;
-        try{
-            const ext_user = await this.repository.FindUser({email});
-            
-            if(ext_user)
-            {
-                const isValid = await VaildatePassword(password, ext_user.password, ext_user.salt);
-                if(isValid)
-                {
-                    
-                    const token = await GenerateSignature({email:email, _id: ext_user._id});
-                    return FormateData({id:ext_user._id, token});
-                }
-                
-            }
+        
+        const ext_user = await this.repository.FindUser({email});
+        if(ext_user===null){
+            console.log("user not found");
+            throw new NotFoundError("user not found with provided email id");
+        } 
+        
+        const isValid = await VaildatePassword(password, ext_user.password, ext_user.salt);
+        if(!isValid)throw new ValidationError("password does not match");
+        
+        const token = await GenerateSignature({email:email, _id: ext_user._id});
+        return FormateData({id:ext_user._id, token});
 
-            return FormateData({data:null});
-        }catch (e) {
-            throw new Error('Data Not Found',e);
-        }
+        
     }
 
     // async UpdatePlatform(userId, platformList)
@@ -115,7 +111,7 @@ class UserService{
             return FormateData(ext_user);
         }
         catch (err){
-            throw new Error('No match User', err);
+            next(err);
         }
     }
 

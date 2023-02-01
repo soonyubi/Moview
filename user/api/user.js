@@ -31,7 +31,7 @@ module.exports = (app, channel)=>{
             }
         }
         catch (e) {
-            // some api error
+            next(e);
         }
     });
 
@@ -39,16 +39,10 @@ module.exports = (app, channel)=>{
         try {
             const {email, password} = req.body;
             const {data} = await service.SignIn({email,password});
-            console.log(data);
-            if(data===null){
-                return res.json({"status":"user not found"});
-            }
-            else{
-                return  res.json(data);
-            }
+            return res.json(data);
         }
         catch (e) {
-             // some api error
+            next(e);
         }
     });
 

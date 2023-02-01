@@ -1,5 +1,5 @@
 const {UserModel, InterestModel} = require("../models");
-const {STATUS_CODES} = require('../../util/app-error');
+const {STATUS_CODES,APIError, ValidationError} = require('../../util/errors/app-error');
 const { FormateData } = require("../../util");
 
 class UserRepository{
@@ -7,11 +7,10 @@ class UserRepository{
     async FindUser({email}){
         try{
             const result = await UserModel.findOne({email:email});
-            console.log(result);
             return result;
         }
         catch(err){
-            console.log(err);
+            throw new APIError("database not working properly")
         }
     }
 
@@ -19,10 +18,10 @@ class UserRepository{
         try{
             
             const result = await UserModel.findOne({_id:userId});
-            console.log(result);
+            
             return result;
         }catch(err){
-
+            throw new APIError("database not working properly")
         }
     }
 
@@ -48,13 +47,13 @@ class UserRepository{
             return result;
         }
         catch(err){
-            // API ERROR
-            console.log(err);
+            throw new APIError("database not working properly")
         }
     }
 
     async UpdateReview(userId, data){
-        const ext_user = await UserModel.findById(userId);
+        try{
+            const ext_user = await UserModel.findById(userId);
         const new_review = {
             _id : data._id,
             movieId : data.movieId,
@@ -86,6 +85,9 @@ class UserRepository{
             
             return result;
         }
+        }catch(err){
+            throw new APIError("database not working properly")
+        }
        
         
     }
@@ -93,33 +95,40 @@ class UserRepository{
 
     async FindInterest(userId,interestId){
         const data = await InterestModel.findById({_id:interestId});
-        if(!data) return null;
+        if(!data) throw ValidationError("interest id is not valid")
         return data;
     }
     async FindAllInterest(userId){
-        const ext_user = await UserModel.findById(userId).populate("interest");
-        if(!ext_user) return null;
-        
-        console.log(ext_user.interest);
-        return ext_user.interest;
+        try{
+            const ext_user = await UserModel.findById(userId).populate("interest");
+            if(!ext_user) throw ValidationError("interest id is not valid")
+            return ext_user.interest;
+        }catch(err){
+            throw new APIError("database not working properly")
+        }
     }
     async CreateInterest(userId, create_data){
-        const {name,platform, genre, country, releaseDate, ageLimit, time} = create_data;
-        const ext_user = await UserModel.findById(userId);
-        const result = await ext_user.populate("interest");
-        const new_interest = new InterestModel({
-            name,
-            platform,
-            genre,
-            country,
-            releaseDate,
-            ageLimit,
-            time
-        });
-        result.interest.push(new_interest);
-        await result.save();
-        console.log(result);
-        return new_interest;
+        try {
+            const {name,platform, genre, country, releaseDate, ageLimit, time} = create_data;
+            const ext_user = await UserModel.findById(userId);
+            if(!ext_user) throw new ValidationError("invalid user id");
+            const result = await ext_user.populate("interest");
+            const new_interest = new InterestModel({
+                name,
+                platform,
+                genre,
+                country,
+                releaseDate,
+                ageLimit,
+                time
+            });
+            result.interest.push(new_interest);
+            await result.save();
+            console.log(result);
+            return new_interest;    
+        } catch (error) {
+            throw new APIError("database not working properly")
+        }
     }
     async UpdateInterest(userId,request_data){
         try{
@@ -167,12 +176,12 @@ class UserRepository{
             result.interest= interestList;
             // console.log(update_item);
             await result.save();
-            console.log(result);
+            // console.log(result);
             return update_item;
 
 
         }catch(err){
-
+            throw new APIError("database not working properly")
         }
     }
     async DeleteInterest(userId, interestId){
@@ -181,13 +190,13 @@ class UserRepository{
             console.log(userId);
             console.log(interestId);
             const cnt = await InterestModel.deleteOne({_id:interestId});
-            console.log(cnt);
+            // console.log(cnt);
             if(cnt.deletedCount==0) return null;
             const result = await UserModel.findById(userId).populate("interest");
             await result.save();
             return {cnt};
         }catch(err){
-
+            throw new APIError("database not working properly")
         }
     }
     
@@ -216,7 +225,7 @@ class UserRepository{
             const Saved = await result.save();
             return Saved;
         }catch(err){
-            throw new error(err);
+            throw new APIError("database not working properly")
         }
     }
 
@@ -245,7 +254,7 @@ class UserRepository{
             const Saved = await result.save();
             return Saved;
         }catch(err){
-            throw new error(err);
+            throw new APIError("database not working properly")
         }
     }
 
@@ -274,7 +283,7 @@ class UserRepository{
             const Saved = await result.save();
             return Saved;
         }catch(err){
-            throw new error(err);
+            throw new APIError("database not working properly")
         }
     }
 }
