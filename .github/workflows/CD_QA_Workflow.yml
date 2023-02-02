@@ -18,9 +18,9 @@ jobs:
         working-directory: ./user
         run: |
           touch .env
-          echo APP_SECRET=moview >> .env
-          echo MONGODB_URI=mongodb://nosql-db:27017/moview_user >> .env
-          echo MSG_QUEUE_URL=amqps://ylryxpvt:LFtcpJ4ouZuPLzy533kFXa8gpDDSjES_@dingo.rmq.cloudamqp.com/ylryxpvt >> .env
+          echo APP_SECRET=${{ secrets.QA_APP_SECRET }} >> .env
+          echo MONGODB_URI=${{ secrets.QA_USER_DB_URI }} >> .env
+          echo MSG_QUEUE_URL=${{ secrets.QA_MSG_QUEUE_URL }} >> .env
           echo EXCHANGE_NAME=MOVIEW >> .env
           echo PORT=8001 >> .env
           cat .env
@@ -28,9 +28,9 @@ jobs:
         working-directory: ./movie
         run: |
           touch .env
-          echo APP_SECRET=moview >> .env
-          echo MONGODB_URI=mongodb://nosql-db:27017/moview_movie >> .env
-          echo MSG_QUEUE_URL=amqps://ylryxpvt:LFtcpJ4ouZuPLzy533kFXa8gpDDSjES_@dingo.rmq.cloudamqp.com/ylryxpvt >> .env
+          echo APP_SECRET=${{ secrets.QA_APP_SECRET }} >> .env
+          echo MONGODB_URI=${{ secrets.QA_MOVIE_DB_URI }} >> .env
+          echo MSG_QUEUE_URL=${{ secrets.QA_MSG_QUEUE_URL }} >> .env
           echo EXCHANGE_NAME=MOVIEW >> .env
           echo PORT=8002 >> .env
           cat .env
@@ -39,9 +39,9 @@ jobs:
         working-directory: ./review
         run: |
           touch .env
-          echo APP_SECRET=moview >> .env
-          echo MONGODB_URI=mongodb://nosql-db:27017/moview_review >> .env
-          echo MSG_QUEUE_URL=amqps://ylryxpvt:LFtcpJ4ouZuPLzy533kFXa8gpDDSjES_@dingo.rmq.cloudamqp.com/ylryxpvt >> .env
+          echo APP_SECRET=${{ secrets.QA_APP_SECRET }} >> .env
+          echo MONGODB_URI=${{ secrets.QA_REVIEW_DB_URI }} >> .env
+          echo MSG_QUEUE_URL=${{ secrets.QA_MSG_QUEUE_URL }} >> .env
           echo EXCHANGE_NAME=MOVIEW >> .env
           echo PORT=8003 >> .env
           cat .env
