@@ -17,7 +17,7 @@
 
 ---
 
-### 데모 스케치
+## 데모 스케치
 
 스케치는 하나의 주제를 정해놓고 생각나는대로 태블릿에 마인드맵 형식으로 그렸습니다. 
 
@@ -27,7 +27,7 @@
 
 prodrafts://note/?uuid=695B69B4-3FC5-4C0A-9677-2A87F9253EBF
 
-### 데이터 스키마
+## 데이터 스키마
 
 - [https://drive.google.com/file/d/1z-CN9dNNFV1IgzZo4aJqkhrjkRh-riwN/view?usp=sharing](https://drive.google.com/file/d/1z-CN9dNNFV1IgzZo4aJqkhrjkRh-riwN/view?usp=sharing)
     
@@ -43,7 +43,7 @@ prodrafts://note/?uuid=695B69B4-3FC5-4C0A-9677-2A87F9253EBF
         - USER/MOVIE/REVIEW 를 데이터베이스로 잡고, MOVIE 컬렉션에는 연관된 정보들을 분리해서 서브컬렉션으로 만들었음 
         - actor, director, info, platform 
 
-### API 설계
+## API 설계
 
 API 설계를 excel, notion을 이용할 생각해봤는데. 만약 협업시 변경사항을 다른사람과 공유하기 불편하기도 하므로 다른 툴을 사용하고자 했습니다. 
 
@@ -51,7 +51,7 @@ python-fastapi 프레임워크를 사용한다면, swagger 자동으로 지원�
 
 gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함과 동시에 테스트도 진행할 수 있어서 postman을 사용하기로 했습니다. 
 
-### 아키텍쳐 설계
+## 아키텍쳐 설계
 
 이번 프로젝트에서는 MSA( MicroService Architecture) 로 프로젝트를 구성하고자 합니다.
 
@@ -88,7 +88,7 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 <img width="60%" src="https://user-images.githubusercontent.com/46443443/216064898-4b767049-f90d-4b56-8bbf-0c9926983bab.png"/>
 
 
-### 배포
+## 배포
 
 배포는 다음과 같이 하고자 한다. 
 
@@ -99,12 +99,12 @@ gitbook, insomnia, postman을 써봤는데, 가장 직관적인 ui를 사용함�
 도커화한 서비스는 nginx-proxy, movie service, user service, review service, mongo 이다. 
 
 
-### 테스트
+## 테스트
 
 추가적으로, CI/CI를 위해서 github action을 사용하고자 한다. 
 
-### DevOps
+## DevOps
 
-# 에러 핸들링
+### 에러 핸들링
 에러 로그를 수집하기 위해서 sentry 툴을 사용했습니다. 
 sentry를 사용한 이유는 소스 코드의 어느 위치에서 에러가 발생했는지 상세하게 스택을 확인할 수 있기 때문입니다. 
