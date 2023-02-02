@@ -28,3 +28,13 @@ jobs:
       run : |
         npm ci
         npm test
+    - name: Test Movie Service
+      working-directory: ./movie
+      run : |
+        npm ci
+        npm test
+    - name: Test Review Service
+      working-directory: ./review
+      run : |
+        npm ci
+        npm test
