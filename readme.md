@@ -98,6 +98,9 @@ sentry를 사용한 이유는 소스 코드의 어느 위치에서 에러가 발
 
 왜 ECS, EKS를 사용하지 않으냐면, AWS 공식 문서에서 설명하기를 소규모 어플리케이션에서 Elatic Beanstalk으로 배포하다가 서비스 많아지고 배포에 있어서 세밀한 조정이 필요한 경우 ECS나 EKS를 사용하기를 권장하고 있기 때문이다. 
 
+도커화한 서비스는 nginx-proxy, movie service, user service, review service, mongo 이다. 
+
+
 ### 테스트
 
 추가적으로, CI/CI를 위해서 github action을 사용하고자 한다. 

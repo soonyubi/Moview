@@ -1,0 +1,66 @@
+version: "3"
+services:
+  nosql-db:
+    image: mongo
+    ports:
+      - "27018:27017"
+    container_name: nosql-db
+    volumes:
+      - ./db/:/data/db
+  movie:
+    build:
+      dockerfile: Dockerfile
+      context: ./movie
+    container_name: movie
+    ports:
+      - "8002:8002"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/movie/node_modules
+
+    env_file:
+      - ./movie/.env
+  review:
+    build:
+      dockerfile: Dockerfile
+      context: ./review
+    container_name: review
+    ports:
+      - "8003:8003"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/review/node_modules
+    env_file:
+      - ./review/.env
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user
+    container_name: user
+    ports:
+      - "8001:8001"
+    restart: always
+    depends_on:
+      - "nosql-db"
+
+    volumes:
+      - .:/app/
+      - /app/user/node_modules
+    env_file:
+      - ./user/.env
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - movie
+      - review
+      - user
+    ports:
+      - 80:80
