@@ -16,7 +16,7 @@ const MovieSchema = new Schema({
     country: {type :String, required:true},
     description: {type: String, required: true},
     ageLimit : {type :Number, required:true},
-    reviewCnt:{type:Number,required:true},
+    reviewCnt:{type:Number,required:true,default:0},
     actors:[
         {
             name : {type:String,required:true},
