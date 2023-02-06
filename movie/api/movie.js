@@ -16,6 +16,12 @@ module.exports = (app, channel)=>{
         return res.json(data);
     });
 
+    app.post('/movies',UserAuth, async(req,res,next)=>{
+        // add some code
+        const {data} = await service.CreateMovie(req.body);
+        return res.json(data);
+    });
+
     app.get('/movies/byActor/:actorName',async(req,res,next)=>{
         const {data} = await service.GetMoviesByActor(req.params.actorName);
         return res.json(data);

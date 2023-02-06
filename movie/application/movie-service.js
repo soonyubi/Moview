@@ -55,6 +55,12 @@ class MoiveService{
         
     }
 
+    async CreateMovie(movie){
+        // const {kor_name, eng_name, cur_score, base_score, user_score, genre, releaseDate, platform, poster, runningTime, country, description, ageLimit, reviewCnt,actors} = movie;
+        const result = await this.repository.InsertMovie(movie);
+        return FormateData(result);
+    }
+
     async GetMovieInfo(movieId){
         try{
             const result = await this.repository.FindMovieById(movieId);
