@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+//change
 const MovieSchema = new Schema({
     rank : {type: Number,required:true},
     kor_name : {type:String, required: true, trim: true},
