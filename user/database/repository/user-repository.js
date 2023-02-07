@@ -1,5 +1,5 @@
 const {UserModel, InterestModel} = require("../models");
-const {STATUS_CODES,APIError, ValidationError} = require('../../util/errors/app-error');
+const {STATUS_CODES,APIError, ValidationError, NotFoundError} = require('../../util/errors/app-error');
 const { FormateData } = require("../../util");
 
 class UserRepository{
@@ -50,43 +50,51 @@ class UserRepository{
             throw new APIError("database not working properly")
         }
     }
+    async DeleteReview(userId, reviewId){
+        try{
+            const ext_user = await UserModel.findById(userId).populate("review");
+            
+            if(!ext_user) {
+                // console.log("no exist user")
+                throw NotFoundError("USER NOT FOUND");
+            }let review_list = ext_user.review;
+            let isDelete = false;
 
+            review_list.map(item=>{
+                if(item._id.toString()===reviewId){
+                    const index= review_list.indexOf(item);
+                    review_list.splice(index,1);
+                    isDelete = true;
+                }
+            });
+            ext_user.review = review_list;
+            const result = await ext_user.save();
+            return result;
+        }catch(err){
+            console.log(err);
+            return null;
+        }
+    }
     async UpdateReview(userId, data){
         try{
             const ext_user = await UserModel.findById(userId);
-        const new_review = {
-            _id : data._id,
-            movieId : data.movieId,
-            description : data.description,
-            score : data.score,
-            registered_at : data.registered_at
-        }
-        if(ext_user){
-            let review_list = ext_user.review;
-            if(review_list.length > 0){
-                let isExist = false;
-                review_list.map(item =>{
-                    if(item._id.toString()===new_review._id.toString()){
-                        const index = review_list.indexOf(item);
-                        review_list.splice(index,1);
-                        isExist = true;
-                    }
-                });
+            
+            if(!ext_user) throw new NotFoundError("Update Review - user not found");
 
-                if(!isExist){
-                    review_list.push(new_review);
+            const review_list = ext_user.review;
+            review_list.map(item=>{
+                if(item._id.toString()===data._id.toString()){
+                    item.score = data.score;
+                    item.description = data.description;
                 }
-            }else{
-                review_list.push(new_review);
-            }
-
+            });
             ext_user.review = review_list;
             const result = await ext_user.save();
             
             return result;
-        }
+        
         }catch(err){
-            throw new APIError("database not working properly")
+            throw err;
         }
        
         

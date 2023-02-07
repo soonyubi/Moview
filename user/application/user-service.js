@@ -211,9 +211,11 @@ class UserService{
     async SubScribeEvents( payload, type){
         
         payload = JSON.parse(payload);
-        console.log(payload);
+       
         const {userId ,event, data} = payload;
-        console.log(type);
+        if(data===null){
+            return;
+        }
        
 
         if(type==='MOVIE'){
@@ -232,7 +234,7 @@ class UserService{
         }else{
             const {_id, movieId, score, description, registered_at} = data;
             // type === REVIEW
-            console.log('subscribe event - review')
+            
             switch(event){
                 case 'CREATE_REVIEW':
                     
@@ -247,7 +249,28 @@ class UserService{
                     return payload;                    
                 case 'READ_REVIEW':
                 case 'UPDATE_REVIEW':
+                    const result3 = await this.repository.UpdateReview(userId,data);
+                    if(result3===null) return null;
+                    const user3 = {
+                        _id : result3._id,
+                        nickname : result3.nickname,
+                        banner : result3.banner,
+                        rank : result3.rank
+                    };
+                    const payload3 = this.GetPayload(user3,data,'DELETE_REVIEW');
+                    return payload3;
                 case 'DELETE_REVIEW':
+                    const result2 = await this.repository.DeleteReview(userId, _id);
+                    if(result2===null) return null;
+                    const user2 = {
+                        _id : result2._id,
+                        nickname : result2.nickname,
+                        banner : result2.banner,
+                        rank : result2.rank
+                    };
+                    const payload2 = this.GetPayload(user2,data,'DELETE_REVIEW');
+                    return payload2;
+                    
                 case 'LIKE_REVIEW':
                 case 'UNLIKE_REVIEW':
 

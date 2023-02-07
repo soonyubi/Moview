@@ -110,12 +110,9 @@ module.exports.SubscribeReviewMessage = async(channel, service, binding_key)=>{
             console.log(data.content.toString());
             
             let payload = await service.SubScribeEvents(data.content.toString(),'REVIEW');
+            
             console.log('payload : : :: :' ,payload);
             this.PublishMessage(channel,USER_BINDING_KEY,JSON.stringify(payload));
             channel.ack(data);
     });
-    
-    
-
-
 };

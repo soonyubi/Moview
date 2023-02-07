@@ -13,10 +13,11 @@ module.exports = (app)=>{
     app.use((error, req,res,next)=>{
         let reportError = true;
 
+        console.log("error handling occur");
         // skip common / known errors
         [NotFoundError, ValidationError,AuthorizeError].forEach((typeofError)=>{
             if(error instanceof typeofError){
-                console.log(typeof typeofError);
+                // console.log(error instanceof typeofError);
                 reportError = false;
             }
         });
@@ -24,6 +25,7 @@ module.exports = (app)=>{
         if(reportError){
             Sentry.captureException(error);
         }
+        
     
 
         const statusCode = error.statusCode || 500;

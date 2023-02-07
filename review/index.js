@@ -3,6 +3,7 @@ const {PORT} = require('./config');
 const {databaseConnection} = require('./database');
 const expressApp = require('./express-app');
 const { CreateChannel } = require('./util');
+const errorHandler = require('./util/errors');
 
 const StartServer = async ()=>{
     const app = express();
@@ -12,7 +13,9 @@ const StartServer = async ()=>{
     const channel = await CreateChannel();
 
     await expressApp(app,channel);
-    console.log(PORT);
+    
+    errorHandler(app)
+
     app.listen(PORT, ()=>{
         console.log(`User Service listening on PORT : ${PORT}`);
     })
